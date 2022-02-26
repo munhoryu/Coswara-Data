@@ -71,3 +71,24 @@ def check_sample_info_list(sample_info_list):
     print(f'sample info length: {len(sample_info_list)}')
     print(f'checked sample info length: {len(checked_sample_info_list)}')
     return checked_sample_info_list
+
+
+def load_sample_info_list():
+    # sample_info_list = make_sample_info_list() # 2375 samples
+    # write_sample_info_list(sample_info_list, 'sample_info_raw.json')
+
+    # sample_info_list = read_sample_info_list('sample_info_raw.json')
+
+    # sample_info_list = check_sample_info_list(sample_info_list) # 2300 samples
+    # write_sample_info_list(sample_info_list, 'sample_info_checked.json')
+
+    sample_info_list = read_sample_info_list('sample_info_checked.json')
+
+    # shuffle samples
+    random.seed(a=42)
+    random.shuffle(sample_info_list)
+    # reduce samples
+    sample_info_list = sample_info_list[:1200]
+
+    # print(len(sample_info_list))
+    return sample_info_list

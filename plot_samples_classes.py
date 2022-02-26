@@ -12,6 +12,7 @@ def check_sample_classes(sample_path):
         print(f'{class_file_name}')
         file_name = os.path.join(sample_path, class_file_name)
         x, sr = process_file(file_name)
+        axs[i].set_title(f'{class_labels[i]} Signal')
         # axs[i].plot(x, c='k')
         t = np.arange(0, len(x)) / sr
         axs[i].plot(t, x, c='k')

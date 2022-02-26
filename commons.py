@@ -26,32 +26,6 @@ def sample_path_from_info(info):
     return path
 
 
-def load_sample_info_list():
-    if not os.path.exists(coswara_data_dir):
-        raise("Check the Coswara dataset directory!")
-    if not os.path.exists(extracted_data_dir):
-        raise("Check the extracted dataset directory!")
-    date_dirs = list(map(os.path.basename, glob.glob(
-        '{}/202*'.format(extracted_data_dir))))
-    # print(len(date_dirs))
-    # print(date_dirs)
-    sample_info_list = []
-    for date_dir in date_dirs:
-        # print(date_dir)
-        date_path = os.path.join(extracted_data_dir, date_dir)
-        # print(date_path)
-        sample_dirs = list(
-            map(os.path.basename, glob.glob('{}/*'.format(date_path))))
-        # print(sample_dirs)
-        for sample_dir in sample_dirs:
-            # sample_path = os.path.join(date_path, sample_dir)
-            sample_info_list.append(
-                {'date_dir': date_dir, 'sample_dir': sample_dir})
-        # print(len(sample_info_list))
-
-    return sample_info_list
-
-
 def load_file(path):
     sr, removeaudio, chunk, db_max = 48000, False, 3, 50
     try:
@@ -90,8 +64,19 @@ def process_file(path):
     # win_length = np.floor(0.020*sr).astype(int)  # 20ms
     # x = trim_silence(x_, pad, db_max, win_length, hop_length)
 
+    # clip start and end
     pad = int(0.2 * sr)
     start = pad
     end = int(min(len(x)-pad, len(x)))
     x = x[start:end]
+
+    # resize to 7 s
+    target_duration = 7.0
+    target_len = int(target_duration * sr)
+    if len(x) >= target_len:
+        x = x[0:target_len]
+    else:
+        pad_len = target_len - len(x)
+        x = np.pad(x, (0, pad_len), 'constant', constant_values=(0, x[-1]))
+
     return x, sr
