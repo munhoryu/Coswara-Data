@@ -2,3 +2,5 @@ extracted*/
 lifesignals/
 filtered*
 *.ts
+coswara_mfcc_features.npy
+
